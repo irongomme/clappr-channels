@@ -1,0 +1,11 @@
+<div class="channels" data-channels>
+	<ul data-channels-list>
+		<% for(var c in channels) { %>
+		<li data-channel-choice>
+			<a href="#channel-<%= c %>" data-id="<%= c %>">
+				<img src="<%= channels[c].poster %>" alt="<%= channels[c].name %>" />
+			</a>
+		</li>
+		<% } %>
+	</ul>
+</div>

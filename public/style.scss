@@ -1,0 +1,39 @@
+@import 'compass/css3';
+
+.player-channels[data-channels] {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+	z-index: 1;
+
+	ul[data-channels-list] {
+		margin: 0px;
+		padding: 0px;
+		width: 20%;
+		padding-left: 2.5%;
+		padding-top: 2.5%;
+		list-style-type: none;
+
+		li[data-channel-choice] {
+			a {
+				display: block;
+				width: 100%;
+				height: 100%;
+				margin-bottom: 12.5%;
+				border: solid #ffffff 2px;
+
+				&:hover {
+					@include box-shadow(#ffffff 0 0 25px, #ffffff 0 0 3px 1px inset);
+				}
+
+				img {
+					display: block;
+					max-width: 100%;
+					height: auto;
+				}
+			}
+		}
+	}
+}
