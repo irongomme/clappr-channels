@@ -32,12 +32,17 @@ class Channels extends UiCorePlugin {
 
 	channelClicked(channelLink) {
 		//Get the channel clicked
-		var channel = this.channels[channelLink.currentTarget.getAttribute('data-id')]
+		var channelId = channelLink.currentTarget.getAttribute('data-id')
+		var channel = this.channels[channelId]
+
+		//Put old channel into the list
+		this.channels[channelId] = {
+			source: this.core.options.source,
+			poster: this.core.options.poster
+		}
 
 		//Loading the new source
 		this.core.load(channel.source)
-
-		//Current container
 		this.container = this.core.getCurrentContainer();
 
 		//Update poster if exists
@@ -47,6 +52,8 @@ class Channels extends UiCorePlugin {
 
 		//When ready, trigger play
 		this.container.on(Events.CONTAINER_READY, this.container.play)
+
+		this.render()
 	}
 
 	render() {
