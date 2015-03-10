@@ -6,7 +6,12 @@
 	height: 100%;
 	top: 0px;
 	left: 0px;
-	z-index: 1;
+	@include transition(all 0.6s ease);
+
+	&.channels-hide {
+		@include opacity(0);
+		left: -25%;
+	}
 
 	ul[data-channels-list] {
 		margin: 0px;

@@ -27,7 +27,13 @@ class Channels extends UiCorePlugin {
 	constructor(core) {
 		this.core = core
 		this.channels = core.options.channels || []
+		this.keepVisible = false
 		super(core)
+	}
+
+	bindEvents() {
+		this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_SHOW, this.show)
+		this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_HIDE, this.hide)
 	}
 
 	channelClicked(channelLink) {
@@ -56,12 +62,41 @@ class Channels extends UiCorePlugin {
 		this.render()
 	}
 
+	isVisible() {
+		return !this.$el.hasClass('channels-hide')
+	}
+
+	show(event) {
+		var timeout = 2500
+		clearTimeout(this.hideId)
+		this.$el.show()
+		this.$el.removeClass('channels-hide')
+		this.hideId = setTimeout(() => this.hide(), timeout)
+	}
+
+	hide() {
+		var timeout = 2500
+		clearTimeout(this.hideId)
+		if (!this.isVisible()) return
+		if (this.keepVisible) {
+			this.hideId = setTimeout(() => this.hide(), timeout)
+		} else {
+			this.$el.addClass('channels-hide')
+		}
+	}
+
 	render() {
-		this.$el.html(this.template({'channels':this.channels}))
-		var style = Styler.getStyleFor(this.name)
+		var style = Styler.getStyleFor(this.name, {
+			baseUrl: this.core.options.baseUrl
+		})
+		
+		this.$el.html(this.template({
+			channels: this.channels
+		}))
 		this.$el.append(style)
 		this.core.$el.append(this.el)
-
+		this.hide()
+		
 		return this
 	}
 }
