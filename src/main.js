@@ -40,6 +40,11 @@ class Channels extends UiCorePlugin {
 		//Current container
 		this.container = this.core.getCurrentContainer();
 
+		//Update poster if exists
+		if(channel.poster && this.container.hasPlugin('poster')) {
+			this.container.getPlugin('poster').load(channel.poster)
+		}
+
 		//When ready, trigger play
 		this.container.on(Events.CONTAINER_READY, this.container.play)
 	}
