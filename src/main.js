@@ -26,22 +26,29 @@ class Channels extends UiCorePlugin {
 
 	constructor(core) {
 		this.core = core
-		this.channels = this.core.channels || []
+		this.channels = core.options.channels || []
 		super(core)
 	}
 
 	channelClicked(channelLink) {
 		//Get the channel clicked
 		var channel = this.channels[channelLink.currentTarget.getAttribute('data-id')]
+
 		//Loading the new source
 		this.core.load(channel.source)
+
+		//Current container
+		this.container = this.core.getCurrentContainer();
+
+		//When ready, trigger play
+		this.container.on(Events.CONTAINER_READY, this.container.play)
 	}
 
 	render() {
 		this.$el.html(this.template({'channels':this.channels}))
 		var style = Styler.getStyleFor(this.name)
 		this.$el.append(style)
-		this.core.container.$el.append(this.el)
+		this.core.$el.append(this.el)
 
 		return this
 	}
