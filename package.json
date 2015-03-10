@@ -2,15 +2,25 @@
   "name": "channels",
   "description": "A plugin for Clappr that adds multiple sources to switch between them from the player.",
   "version": "0.0.1",
+  "repository": "irongomme/clappr-channels",
+  "author": {
+    "name": "Jérôme DENIS",
+    "email": "irongomme@gmail.com",
+    "url": "https://github.com/irongomme"
+  },
+  "keywords": [
+    "clappr",
+    "plugin"
+  ],
   "dependencies": {
-    "clappr": "latest",
-    "lodash.template" : "3.0.0"
+    "clappr": "latest"
   },
   "devDependencies": {
     "browserify": "^6.2.0",
-    "es6ify": "^1.2.0",
+    "babelify": "5.0.3",
     "gulp": "^3.8.6",
     "gulp-minify-css": "^0.3.6",
+    "lodash.template" : "3.0.0",
     "gulp-rename": "^1.2.0",
     "gulp-sass": "^0.7.2",
     "compass-mixins": "0.12.3",
