@@ -20,7 +20,7 @@ class Channels extends UiCorePlugin {
 
 	get events() {
 		return {
-			'click [data-channel-choice] a': 'channelClicked'
+			'click [data-channel-link]:not(.active)': 'channelClicked'
 		}
 	}
 
@@ -28,6 +28,7 @@ class Channels extends UiCorePlugin {
 		this.core = core
 		this.channels = core.options.channels || []
 		this.keepVisible = false
+		this.assignCurrentChannel()
 		super(core)
 	}
 
@@ -36,16 +37,10 @@ class Channels extends UiCorePlugin {
 		this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_HIDE, this.hide)
 	}
 
-	channelClicked(channelLink) {
-		//Get the channel clicked
-		var channelId = channelLink.currentTarget.getAttribute('data-id')
-		var channel = this.channels[channelId]
+	channelClicked(e) {
+		console.log(e)
 
-		//Put old channel into the list
-		this.channels[channelId] = {
-			source: this.core.options.source,
-			poster: this.core.options.poster
-		}
+		var channel = e.target.dataset
 
 		//Loading the new source
 		this.core.load(channel.source)
@@ -59,7 +54,15 @@ class Channels extends UiCorePlugin {
 		//When ready, trigger play
 		this.container.on(Events.CONTAINER_READY, this.container.play)
 
+		this.assignCurrentChannel(channel.source)
 		this.render()
+	}
+
+	assignCurrentChannel(source) {
+		var currentSource = source || this.core.options.source 
+		for(var i in this.channels) {
+			this.channels[i].current = (this.channels[i].source == currentSource)
+		}
 	}
 
 	isVisible() {
@@ -89,12 +92,29 @@ class Channels extends UiCorePlugin {
 		var style = Styler.getStyleFor(this.name, {
 			baseUrl: this.core.options.baseUrl
 		})
-		
-		this.$el.html(this.template({
-			channels: this.channels
-		}))
+
+		this.$el.html(this.template())
 		this.$el.append(style)
 		this.core.$el.append(this.el)
+
+		for(var i in this.channels) {
+			var channelLinkEl = $('<a href="#" data-channel-link></a>')
+			channelLinkEl.attr('data-name', this.channels[i].name)
+			channelLinkEl.attr('data-source', this.channels[i].source)
+			channelLinkEl.attr('data-poster', this.channels[i].poster)
+
+			var channelEl = $('<li data-channel-choice></li>')
+			if(this.channels[i].poster) {
+				channelLinkEl.css({'background-image': 'url('+this.channels[i].poster+'?t='+Math.floor(Date.now() / 1000)+')'})
+			}
+			channelEl.append(channelLinkEl)
+			this.core.$el.find('[data-channels-list]').append(channelEl)
+			if(this.channels[i].current) {
+				channelLinkEl.addClass('active')
+				channelLinkEl.css({'font-size': Math.floor(channelEl.height() * 0.5)})
+			}
+		}
+
 		this.hide()
 		
 		return this
