@@ -113,7 +113,7 @@ class Channels extends UiCorePlugin {
 
 		this.$el.html(this.template())
 		this.$el.append(style)
-		this.core.$el.append(this.el)
+		this.core.$el.prepend(this.el)
 
 		clearTimeout(this.posterRefreshId)
 
