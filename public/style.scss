@@ -48,13 +48,37 @@
 				@include font-smoothing(antialiased);
 				@include border-radius(3px);
 
+				span[data-channel-title] {
+					display:none;
+					position: absolute;
+					width: 100%;
+					bottom: 0px;
+					left: 0px;
+					background-color: #000000;
+					@include opacity(0.8);
+					color: #ffffff;
+					font-family: Arial, Helvetica, sans-serif;
+					font-size: 0.4em;
+					text-align: center;
+					padding: 2% 0;
+				}
+
 				&:hover {
 					@include box-shadow(#ffffff 0 0 25px, #ffffff 0 0 3px 1px inset);
+
+					span[data-channel-title] { 
+						display: block;
+					}
 				}
 
 				&.active {
 					border-color: #202020;
 					cursor: default;
+
+					span[data-channel-title] { 
+						display: block;
+					}
+
 					&:after {
 						content:"\\e001";
 						position: absolute;

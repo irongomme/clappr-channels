@@ -110,21 +110,25 @@ class Channels extends UiCorePlugin {
 		this.core.$el.append(this.el)
 
 		for(var i in this.channels) {
-			var channelLinkEl = $('<a href="#" data-channel-link></a>')
-			channelLinkEl.attr('data-name', this.channels[i].name)
+			var channelLinkEl = $('<a href="#" data-channel-link><span data-channel-title>'+this.channels[i].name+'</span></a>')
+			var channelEl = $('<li data-channel-choice></li>')
+
 			channelLinkEl.attr('data-source', this.channels[i].source)
 			channelLinkEl.attr('data-poster', this.channels[i].poster)
-
-			var channelEl = $('<li data-channel-choice></li>')
+			
 			if(this.channels[i].poster) {
 				channelLinkEl.css({'background-image': 'url('+this.channels[i].poster+'?t='+Math.floor(Date.now() / 1000)+')'})
 			}
-			channelEl.append(channelLinkEl)
-			this.core.$el.find('[data-channels-list]').append(channelEl)
+			
 			if(this.channels[i].current) {
 				channelLinkEl.addClass('active')
-				channelLinkEl.css({'font-size': Math.floor(channelEl.height() * 0.5)})
 			}
+
+			channelEl.append(channelLinkEl)
+
+			this.core.$el.find('[data-channels-list]').append(channelEl)
+			
+			channelLinkEl.css({'font-size': Math.floor(channelEl.height() * 0.5)})
 		}
 
 		this.hide()
