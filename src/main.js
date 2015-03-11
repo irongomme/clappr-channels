@@ -40,8 +40,6 @@ class Channels extends UiCorePlugin {
 	}
 
 	channelClicked(e) {
-		console.log(e)
-
 		var channel = e.target.dataset
 
 		//Loading the new source
