@@ -70,6 +70,9 @@ class Channels extends UiCorePlugin {
 	}
 
 	show(event) {
+		if(this.core.options.channelsFullscreenOnly && !this.isFullscreen()) {
+			return
+		}
 		var timeout = 2500
 		clearTimeout(this.hideId)
 		this.$el.show()
@@ -86,6 +89,15 @@ class Channels extends UiCorePlugin {
 		} else {
 			this.$el.addClass('channels-hide')
 		}
+	}
+
+	isFullscreen() {
+		return (
+			document.webkitFullscreenElement || 
+			document.webkitIsFullScreen || 
+			document.mozFullScreen || 
+			!!document.msFullscreenElement
+		);
 	}
 
 	render() {
