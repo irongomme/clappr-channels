@@ -27,6 +27,8 @@ class Channels extends UiCorePlugin {
 	constructor(core) {
 		this.core = core
 		this.channels = core.options.channels || []
+		this.channelsFullscreenOnly = core.options.channelsFullscreenOnly || false
+		this.channelsPosterRefresh = core.options.channelsPosterRefresh || false
 		this.keepVisible = false
 		this.assignCurrentChannel()
 		super(core)
@@ -100,6 +102,10 @@ class Channels extends UiCorePlugin {
 		);
 	}
 
+	getPoster(source) {
+		return source ? source + '?t=' + Math.floor(Date.now() / 1000) : ''
+	}
+
 	render() {
 		var style = Styler.getStyleFor(this.name, {
 			baseUrl: this.core.options.baseUrl
@@ -109,6 +115,8 @@ class Channels extends UiCorePlugin {
 		this.$el.append(style)
 		this.core.$el.append(this.el)
 
+		clearTimeout(this.posterRefreshId)
+
 		for(var i in this.channels) {
 			var channelLinkEl = $('<a href="#" data-channel-link><span data-channel-title>'+this.channels[i].name+'</span></a>')
 			var channelEl = $('<li data-channel-choice></li>')
@@ -117,7 +125,7 @@ class Channels extends UiCorePlugin {
 			channelLinkEl.attr('data-poster', this.channels[i].poster)
 			
 			if(this.channels[i].poster) {
-				channelLinkEl.css({'background-image': 'url('+this.channels[i].poster+'?t='+Math.floor(Date.now() / 1000)+')'})
+				channelLinkEl.css({'background-image': 'url(' + this.getPoster(this.channels[i].poster) + ')'})
 			}
 			
 			if(this.channels[i].current) {
@@ -127,13 +135,24 @@ class Channels extends UiCorePlugin {
 			channelEl.append(channelLinkEl)
 
 			this.core.$el.find('[data-channels-list]').append(channelEl)
-			
+
 			channelLinkEl.css({'font-size': Math.floor(channelEl.height() * 0.5)})
+		}
+
+		if(this.channelsPosterRefresh) {
+			this.posterRefreshId = setInterval(() => this.refreshPosters(), this.channelsPosterRefresh)
 		}
 
 		this.hide()
 		
 		return this
+	}
+
+	refreshPosters() {
+		var channels = this.core.$el.find('[data-channel-link]'), self = this
+		channels.each(function(i, channel) {
+			$(channel).css({'background-image': 'url(' + self.getPoster(channels[i].dataset.poster) + ')'})
+		})
 	}
 }
 
