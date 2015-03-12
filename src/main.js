@@ -111,7 +111,7 @@ class Channels extends UiCorePlugin {
 
 		this.$el.html(this.template())
 		this.$el.append(style)
-		this.core.$el.prepend(this.el)
+		this.core.getCurrentContainer().$el.prepend(this.el)
 
 		clearTimeout(this.posterRefreshId)
 
@@ -132,7 +132,7 @@ class Channels extends UiCorePlugin {
 
 			channelEl.append(channelLinkEl)
 
-			this.core.$el.find('[data-channels-list]').append(channelEl)
+			this.core.getCurrentContainer().$el.find('[data-channels-list]').append(channelEl)
 
 			channelLinkEl.css({'font-size': Math.floor(channelEl.height() * 0.5)})
 		}
